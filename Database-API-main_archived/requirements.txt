@@ -1,0 +1,4 @@
+git+https://git@github.com/project56HR/DatabaseManager.git
+fastapi~=0.121.1
+uvicorn~=0.38.0
+ruff

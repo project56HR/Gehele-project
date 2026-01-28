@@ -1,0 +1,4 @@
+websockets
+paho-mqtt
+git+https://github.com/project56HR/DatabaseManager.git
+ruff

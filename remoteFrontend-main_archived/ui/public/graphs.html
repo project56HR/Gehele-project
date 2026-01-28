@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Remote Monitoring UI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body class="bg-gray-800">
+    <div class="min-h-full">
+        <nav class="bg-gray-800">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="hidden md:block">
+                            <div class="ml-10 flex items-baseline space-x-4">
+                                <a href="/" aria-current="page"
+                                    class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</a>
+
+                                <a href="/graph"
+                                    class="rounded-md bg-gray-950/50 px-3 py-2 text-sm font-medium text-white">Graphs
+                                    and Info</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="-mr-2 flex md:hidden">
+                        <button type="button" command="--toggle" commandfor="mobile-menu"
+                            class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+                            <span class="absolute -inset-0.5"></span>
+                            <span class="sr-only">Open main menu</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                data-slot="icon" aria-hidden="true" class="size-6 in-aria-expanded:hidden">
+                                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                data-slot="icon" aria-hidden="true" class="size-6 not-in-aria-expanded:hidden">
+                                <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <el-disclosure id="mobile-menu" hidden class="block md:hidden">
+                <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+                    <!-- Current: "bg-gray-950/50 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
+                    <a href="/" aria-current="page"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</a>
+                    <a href="/graph"
+                        class="block rounded-md bg-gray-950/50 px-3 py-2 text-base font-medium text-white">Graphs and
+                        Info</a>
+                </div>
+            </el-disclosure>
+            <div class="flex justify-center">
+                <hr class="text-gray-600 w-full">
+            </div>
+
+        </nav>
+        <main class="bg-gray-800">
+            <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-600 p-6 rounded text-white">
+                        <div class="flex justify-center">
+                            <h2 class="font-bold text-2xl">Graph Power</h3>
+                        </div>
+                        <div class="p-8 rounded text-white flex flex-col items-center">
+
+                            
+                                <canvas id="PowerChart" width="600" height="400"></canvas>
+                                <script>
+                                    async function loadPowerData() {
+                                        const response = await fetch("/api/power");
+                                        const data = await response.json();
+
+                                        const xLable = data.map(entry => new Date(entry.timestamp_data).toLocaleTimeString());
+                                        const values = data.map(entry => entry.power_value);
+                                        //const xLable = [1,2,3,4,5,6,7,8];
+                                        //const values = [10,20,30,40,50];
+                                        const ctx = document.getElementById("PowerChart").getContext("2d");
+
+                                        new Chart(ctx, {
+                                            type: "line",
+                                            data: {
+                                                labels: xLable,
+                                                datasets: [
+                                                    {
+                                                        label: "Total Power Usage",
+                                                        data: values,
+                                                        borderColor: "limegreen",
+                                                        fill: true
+                                                    }
+                                                ]
+                                            },
+                                            options: {
+                                                plugins: {
+                                                    legend: {
+                                                        display: false
+                                                    },
+                                                },
+                                                // Changing the label colour
+                                                scales: {
+                                                    y: {
+                                                        grid: {
+                                                            color: "white"
+                                                        },
+                                                        ticks: {
+                                                            color: "white",
+                                                            beginAtZero: true
+                                                        },
+                                                    },
+                                                    x: {
+                                                        grid: {
+                                                            color: "white"
+                                                        },
+                                                        ticks: {
+                                                            color: "white",
+                                                            beginAtZero: true
+                                                        },
+                                                    },
+                                                },
+                                            },
+
+                                        });
+                                    }
+                                    document.addEventListener("DOMContentLoaded", loadPowerData);
+                                </script>
+                                <p class="font-bold">Power In (W)</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-600 p-6 rounded text-white">
+                        <div class="flex justify-center">
+                            <h2 class="font-bold text-2xl">Graph Voltage</h3>
+                        </div>
+                        <div class="p-8 rounded text-white flex flex-col items-center">
+                            
+                                <canvas id="VoltChart" width="600" height="400"></canvas>
+                                <script>
+                                    async function loadPowerData() {
+                                        const response = await fetch("/api/volt");
+                                        const data = await response.json();
+
+                                        const xLable = data.map(entry => new Date(entry.timestamp_data).toLocaleTimeString());
+                                        const values = data.map(entry => entry.volt_value);
+                                        //const xLable = [1,2,3,4,5,6,7,8];
+                                        //const values = [10,20,30,40,50];
+                                        const ctx = document.getElementById("VoltChart").getContext("2d");
+
+                                        new Chart(ctx, {
+                                            type: "line",
+                                            data: {
+                                                labels: xLable,
+                                                datasets: [
+                                                    {
+                                                        label: "Total Voltage",
+                                                        data: values,
+                                                        borderColor: "limegreen",
+                                                        fill: true
+                                                    }
+                                                ]
+                                            },
+                                            options: {
+                                                plugins: {
+                                                    legend: {
+                                                        display: false
+                                                    },
+                                                },
+                                                // Changing the label colour
+                                                scales: {
+                                                    y: {
+                                                        grid: {
+                                                            color: "white"
+                                                        },
+                                                        ticks: {
+                                                            color: "white",
+                                                            beginAtZero: true
+                                                        },
+                                                    },
+                                                    x: {
+                                                        grid: {
+                                                            color: "white"
+                                                        },
+                                                        ticks: {
+                                                            color: "white",
+                                                            beginAtZero: true
+                                                        },
+                                                    },
+                                                },
+                                            },
+
+                                        });
+                                    }
+                                    document.addEventListener("DOMContentLoaded", loadPowerData);
+                                </script>
+                            
+                            <p class="font-bold">Power In (W)</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-600 p-6 rounded text-white">
+                        <div class="flex justify-center">
+                            <h2 class="font-bold text-2xl">Runtime</h3>
+                        </div>
+                        <div class="p-8 rounded text-white flex flex-col items-center">
+                            <p class="font-bold">Total runtime: <span id="runtimedays">0</span> days - <span
+                                    id="runtimehours">0</span> hours - <span id="runtimeminutes">0</span> minutes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
