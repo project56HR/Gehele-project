@@ -2,9 +2,10 @@ import asyncio
 import random
 
 import websockets
+from databaseManager.databaseManager import DatabaseManager as databaseManager
 
 from dataHandler import handle_mqtt_client
-from databaseManager.databaseManager import DatabaseManager as databaseManager
+
 db = databaseManager(user="admin", password="root", host="192.168.2.121:3306")
 
 

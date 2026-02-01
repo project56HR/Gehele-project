@@ -1,7 +1,7 @@
 from datetime import datetime, time
 try:
     from databaseManager.databaseManager import DatabaseManager
-except Exception as e:
+except Exception:
     from databaseManager import DatabaseManager
 
 from fastapi import FastAPI, HTTPException

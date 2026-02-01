@@ -3,7 +3,7 @@ Unit tests for the Wind Generator Stats FastAPI application.
 Tests all API endpoints with various scenarios including edge cases.
 """
 from datetime import datetime
-from unittest.mock import patch, Mock, MagicMock
+from unittest.mock import Mock
 import pytest
 import threading
 from starlette.testclient import TestClient
