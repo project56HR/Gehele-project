@@ -1,0 +1,4 @@
+websockets
+paho-mqtt
+databasemanager-02.35.tar.gz
+ruff

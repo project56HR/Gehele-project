@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: MobileGenerator
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "32848:32848"
+    volumes:
+      - /home/project56/PiFinal:/workspace
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: user
+      DB_PASSWORD: root
+      DB_NAME: mydb
+      DB_PORT: 3306
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_windgen
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wind_generator_stats
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+      TZ: Europe/Amsterdam
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+
+volumes:
+  mysql_data:

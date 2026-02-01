@@ -1,0 +1,12 @@
+websockets
+paho-mqtt
+Python/databasemanager-0.2.35.tar.gz
+ruff
+fastapi~=0.121.1
+uvicorn~=0.38.0
+ruff
+##test requiremtns
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
